@@ -1,21 +1,22 @@
-"use client"
-import React from 'react'
+"use client";
+import React from "react";
+import { ThemeProvider } from "next-themes";
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import Header from "@/components/Rcomponents/Header";
 
-
-function Provider({children}) {
+function Provider({ children }) {
   return (
-    <div>
-        <NextThemesProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChang>
-        {children}
-        </NextThemesProvider>
-    </div>
-  )
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem={false}
+      forcedTheme="dark"
+    >
+       <Header />
+      {children}
+     
+    </ThemeProvider>
+  );
 }
 
-export default Provider
+export default Provider;

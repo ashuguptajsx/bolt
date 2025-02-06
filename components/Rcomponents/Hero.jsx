@@ -3,6 +3,7 @@
 import { ArrowRight, Link } from "lucide-react";
 import React from "react";
 import { useState } from "react";
+import Suggestion from "../boiler-plate/suggestion";
 
 const Hero = () => {
 
@@ -21,6 +22,11 @@ const Hero = () => {
          {userInput && <ArrowRight className="bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer" />}
         </div>
         <Link className="h-5 w-5"/>
+      </div>
+      <div className="flex flex-wrap ">
+       {Suggestion?.SUGGESTIONS.map((suggestion, index) => (
+        <h2 key={index}>{suggestion} </h2>
+       ))}
       </div>
     </div>
   );

@@ -6,15 +6,19 @@ import { useState } from "react";
 import Suggestion from "../boiler-plate/suggestion";
 
 const Hero = () => {
-
   const[userInput, setUserInput] = useState("")
+
+
+  const onGenerate = () =>{
+    
+  }
   return (
-    <div className="flex flex-col items-center mt-36 xl:mt-52 gap-2">
+    <div className="flex flex-col items-center mt-36 xl:mt-40 gap-2">
       <h2 className="text-4xl font-bold ">What do you want to build?</h2>
       <p className="text-gray-500 font-medium">
         Prompt,run,edit and deploy full-stack web apps
       </p>
-      <div className="p-5 border rounded-xl max-w-2xl w-full">
+      <div className="p-5 border rounded-xl max-w-xl w-full">
         <div className="flex gap-2">
           <textarea placeholder="What you want to build"
           onChange = {(event) => setUserInput(event.target.value)}
@@ -23,9 +27,9 @@ const Hero = () => {
         </div>
         <Link className="h-5 w-5"/>
       </div>
-      <div className="flex flex-wrap ">
+      <div className="flex flex-wrap max-w-2xl items-center justify-center gap-3 ">
        {Suggestion?.SUGGESTIONS.map((suggestion, index) => (
-        <h2 key={index}>{suggestion} </h2>
+        <h2 key={index} className="p-1 px-2 border rounded-full text-sm cursor-pointer">{suggestion} </h2>
        ))}
       </div>
     </div>

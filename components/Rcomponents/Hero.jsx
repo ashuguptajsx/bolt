@@ -1,37 +1,64 @@
 "use client";
 
-import { ArrowRight, Link } from "lucide-react";
-import React from "react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import React, { useState, useContext } from "react";
 import Suggestion from "../boiler-plate/suggestion";
+import { MessageContext } from "@/Context/MessageContext";
+import { AuthenticationContext } from "@/Context/AuthenticationContext";
+import SigninPage from "./SigninPage";
 
 const Hero = () => {
-  const[userInput, setUserInput] = useState("")
+  const [userInput, setUserInput] = useState("");
+  const { messages, setMessages } = useContext(MessageContext);
+  const { Authentication } = useContext(AuthenticationContext);
+  const [openDialog, setOpenDialog] = useState(false); // ✅ Proper state
 
+  const onGenerate = (input) => {
+    if (!Authentication?.name) {
+      setOpenDialog(true); // ✅ Correctly setting state to true
+      return;
+    }
 
-  const onGenerate = () =>{
-    
-  }
+    setMessages({
+      role: "User",
+      content: input,
+    });
+  };
+
   return (
     <div className="flex flex-col items-center mt-36 xl:mt-40 gap-2">
-      <h2 className="text-4xl font-bold ">What do you want to build?</h2>
+      <h2 className="text-4xl font-bold">What do you want to build?</h2>
       <p className="text-gray-500 font-medium">
-        Prompt,run,edit and deploy full-stack web apps
+        Prompt, run, edit and deploy full-stack web apps
       </p>
       <div className="p-5 border rounded-xl max-w-xl w-full">
         <div className="flex gap-2">
-          <textarea placeholder="What you want to build"
-          onChange = {(event) => setUserInput(event.target.value)}
-           className="outline-none bg-transparent w-full h-32 max-h-56 "/>
-         {userInput && <ArrowRight className="bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer" />}
+          <textarea
+            placeholder="What you want to build"
+            onChange={(event) => setUserInput(event.target.value)}
+            className="outline-none bg-transparent w-full h-32 max-h-56"
+          />
+          {userInput && (
+            <ArrowRight
+              onClick={() => onGenerate(userInput)}
+              className="bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer"
+            />
+          )}
         </div>
-        <Link className="h-5 w-5"/>
       </div>
-      <div className="flex flex-wrap max-w-2xl items-center justify-center gap-3 ">
-       {Suggestion?.SUGGESTIONS.map((suggestion, index) => (
-        <h2 key={index} className="p-1 px-2 border rounded-full text-sm cursor-pointer">{suggestion} </h2>
-       ))}
+      <div className="flex flex-wrap max-w-2xl items-center justify-center gap-3">
+        {Suggestion?.SUGGESTIONS.map((suggestion, index) => (
+          <h2
+            key={index}
+            className="p-1 px-2 border rounded-full text-sm cursor-pointer"
+            onClick={() => onGenerate(suggestion)}
+          >
+            {suggestion}
+          </h2>
+        ))}
       </div>
+      {/* ✅ Pass boolean value instead of an object */}
+      <SigninPage openDialog={openDialog} closeDialog={setOpenDialog} />
     </div>
   );
 };

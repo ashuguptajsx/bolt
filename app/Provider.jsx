@@ -25,6 +25,7 @@ function Provider({ children }) {
     if(typeof window !== "undefined"){
       const user = JSON.parse(localStorage.getItem("user"));
       const result = await convex.query(api.users.GetUser, {email: user?.email});
+      setAuthentication(result);
       console.log(result);
     }  
   }

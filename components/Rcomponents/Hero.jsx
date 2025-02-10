@@ -12,6 +12,7 @@ const Hero = () => {
   const { messages, setMessages } = useContext(MessageContext);
   const { Authentication } = useContext(AuthenticationContext);
   const [openDialog, setOpenDialog] = useState(false); // ✅ Proper state
+  const CreateWorkSpace = useMutation(api.workspace.CreateWorkspace);
 
   const onGenerate = (input) => {
     if (!Authentication?.name) {

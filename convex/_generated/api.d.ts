@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as Schema from "../Schema.js";
 import type * as users from "../users.js";
+import type * as workspace from "../workspace.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,6 +28,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   Schema: typeof Schema;
   users: typeof users;
+  workspace: typeof workspace;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

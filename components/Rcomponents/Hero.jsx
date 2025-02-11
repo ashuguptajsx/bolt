@@ -6,24 +6,38 @@ import Suggestion from "../boiler-plate/suggestion";
 import { MessageContext } from "@/Context/MessageContext";
 import { AuthenticationContext } from "@/Context/AuthenticationContext";
 import SigninPage from "./SigninPage";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
   const [userInput, setUserInput] = useState("");
   const { messages, setMessages } = useContext(MessageContext);
-  const { Authentication } = useContext(AuthenticationContext);
+  const { authentication } = useContext(AuthenticationContext);
   const [openDialog, setOpenDialog] = useState(false); // ✅ Proper state
   const CreateWorkSpace = useMutation(api.workspace.CreateWorkspace);
+  const router =  useRouter();
 
-  const onGenerate = (input) => {
-    if (!Authentication?.name) {
+  const onGenerate = async(input) => {
+    if (!authentication?.name) {
       setOpenDialog(true); // ✅ Correctly setting state to true
       return;
     }
 
     setMessages({
-      role: "User",
+      role: "user", 
       content: input,
     });
+
+    const workspaceId = await CreateWorkSpace({
+      user: authentication._id,
+      messages:[{
+        role:"user",
+        content: input,
+      }]
+    })
+    console.log(workspaceId);
+    router.push('/workspace/'+workspaceId);
   };
 
   return (

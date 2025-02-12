@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "next/navigation";
-import { useConvex } from "convex/react";
+import { useConvex, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { MessageContext } from "@/Context/MessageContext";
 import { AuthenticationContext } from "@/Context/AuthenticationContext";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import { ArrowRight, Loader2Icon } from "lucide-react";
 import Prompt from "../boiler-plate/Prompt";
 import axios from "axios";
+import ReactMarkdown from "react-markdown"; 
 
 function ChatView() {
   const convex = useConvex();
@@ -16,7 +17,7 @@ function ChatView() {
   const { messages, setMessages } = useContext(MessageContext);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const UpdateMessages = useMutation
+  const UpdateMessages = useMutation(api.workspace.UpdateMessages);
   const { id } = useParams();
 
 
@@ -60,6 +61,13 @@ function ChatView() {
         content: result.data.result,
       },
     ]);
+    await UpdateMessages({
+      messages:[...messages,{
+          role: "ai",
+          content: result.data.result
+      }],
+      workspaceId: id,
+    })
     setLoading(false);
   };
 
@@ -67,7 +75,8 @@ function ChatView() {
     setMessages(prev =>[...prev,{
         role: "user",
         content: input, 
-    }])
+    }]);
+    setUserInput("");
   }
 
   return (
@@ -88,7 +97,7 @@ function ChatView() {
                 className="rounded-full"
               />
             )}
-            <h2>{msg.content}</h2>
+            <ReactMarkdown className="flex flex-col">{msg.content}</ReactMarkdown>
           </div>
         ))}
         {loading && (

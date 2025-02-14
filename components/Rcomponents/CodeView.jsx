@@ -27,7 +27,7 @@ function CodeView() {
   const [files, setFiles] = useState(Suggestion?.DEFAULT_FILE);
   const { messages, setMessages } = useContext(MessageContext);
   const UpdateFiles = useMutation(api.workspace.UpdateFiles);
-  const[Loading, setLoading] = useState(false);
+  const[loading, setLoading] = useState(false);
 
   useEffect(() => {
     id && GetFiles();
@@ -70,7 +70,7 @@ function CodeView() {
     setLoading(false);
   };
   return (
-    <div>
+    <div className="relative">
       <div className="bg-[#18181] w-full p-2 border">
         <div className="flex items-center flex-wrap shrink-0 bg-black p-2 w-[140px] gap-3 justify-center rounded-full">
           <h2
@@ -126,10 +126,10 @@ function CodeView() {
           )}
         </SandpackLayout>
       </SandpackProvider>
-      <div className="p-10 bg-gray-800 opacity-50 absolute top-0 rounded-lg  flex items-center justify-center">
+      {loading && <div className="p-10 bg-gray-800 opacity-80 absolute top-0 rounded-lg w-full h-full  flex items-center justify-center">
         <Loader2Icon className="animate-spin h-10 w-10 text-white"/>
         <h2 className="text-white">Generating Files...</h2>
-      </div>
+      </div>}
     </div>
   );
 }

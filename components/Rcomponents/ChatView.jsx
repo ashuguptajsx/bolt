@@ -9,7 +9,8 @@ import Image from "next/image";
 import { ArrowRight, Loader2Icon } from "lucide-react";
 import Prompt from "../boiler-plate/Prompt";
 import axios from "axios";
-import ReactMarkdown from "react-markdown"; 
+import ReactMarkdown from "react-markdown";
+import { useSidebar } from "@/components/ui/sidebar";
 
 function ChatView() {
   const convex = useConvex();
@@ -19,9 +20,7 @@ function ChatView() {
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
   const { id } = useParams();
-
-
- 
+  const {toggleSidebar} = useSidebar();
 
   useEffect(() => {
     if (id) {
@@ -62,27 +61,33 @@ function ChatView() {
       },
     ]);
     await UpdateMessages({
-      messages:[...messages,{
+      messages: [
+        ...messages,
+        {
           role: "ai",
-          content: result.data.result
-      }],
+          content: result.data.result,
+        },
+      ],
       workspaceId: id,
-    })
+    });
     setLoading(false);
   };
 
   const onGenerate = async (input) => {
-    setMessages(prev =>[...prev,{
+    setMessages((prev) => [
+      ...prev,
+      {
         role: "user",
-        content: input, 
-    }]);
+        content: input,
+      },
+    ]);
     setUserInput("");
-  }
+  };
 
   return (
     <div className="h-[85vh] flex flex-col">
       {/* Messages Container (Scrollable) */}
-      <div className="flex-1 overflow-y-scroll scrollbar-hide space-y-2">
+      <div className="flex-1 overflow-y-scroll scrollbar-hide space-y-2 pl-5">
         {messages?.map((msg, index) => (
           <div
             key={index}
@@ -95,9 +100,12 @@ function ChatView() {
                 width={35}
                 height={35}
                 className="rounded-full"
+               
               />
             )}
-            <ReactMarkdown className="flex flex-col">{msg.content}</ReactMarkdown>
+            <ReactMarkdown className="flex flex-col">
+              {msg.content}
+            </ReactMarkdown>
           </div>
         ))}
         {loading && (
@@ -109,20 +117,33 @@ function ChatView() {
       </div>
 
       {/* Input Box (Fixed at Bottom) */}
-      <div className="p-5 mt-3 border rounded-xl max-w-xl w-full bg-gray-950">
-        <div className="flex gap-2">
-          <textarea
-            placeholder="What you want to build"
-            value={userInput}
-            onChange={(event) => setUserInput(event.target.value)}
-            className="outline-none bg-transparent w-full h-32 max-h-56 resize-none"
+      <div className="flex gap-2 items-end">
+        {authentication && (
+          <Image
+            src={authentication?.picture}
+            alt="picture"
+            width={30}
+            height={30}
+            className="rounded-full cursor-pointer"
+            onClick={toggleSidebar}
           />
-          {userInput && (
-            <ArrowRight
-              onClick={() => onGenerate(userInput)}
-              className="bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer"
+        )}
+
+        <div className="p-5 mt-3 border rounded-xl max-w-xl w-full bg-gray-950">
+          <div className="flex gap-2">
+            <textarea
+              placeholder="What you want to build"
+              value={userInput}
+              onChange={(event) => setUserInput(event.target.value)}
+              className="outline-none bg-transparent w-full h-32 max-h-56 resize-none"
             />
-          )}
+            {userInput && (
+              <ArrowRight
+                onClick={() => onGenerate(userInput)}
+                className="bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer"
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

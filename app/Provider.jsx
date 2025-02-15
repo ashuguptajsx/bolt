@@ -9,7 +9,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import AppSidebar from "@/components/Rcomponents/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
+
+
 function Provider({ children }) {
   const [messages, setMessages] = useState([]);
   const [authentication, setAuthentication] = useState(null); // ✅ Default is null, not an empty array
@@ -47,7 +49,7 @@ function Provider({ children }) {
             forcedTheme="dark"
           >
             <Header />
-            <SidebarProvider>
+            <SidebarProvider defaultOpen={false}>
               <AppSidebar/>
             {children}
             </SidebarProvider>

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Button } from "@/components/ui/button";
+import Footer from "./Footer"; 
 
 import Image from "next/image";
 import { MessageCircleCode } from "lucide-react";
@@ -25,9 +26,11 @@ const AppSidebar = () => {
             <Button> <MessageCircleCode/> Start new Conversation</Button>
           <SidebarGroup />
           <WorkspaceHistory/>
-          <SidebarGroup />
+          {/* <SidebarGroup /> */}
         </SidebarContent>
-        <SidebarFooter />
+        <SidebarFooter >
+           <Footer/>
+          </SidebarFooter>
       </Sidebar>
     </div>
   );

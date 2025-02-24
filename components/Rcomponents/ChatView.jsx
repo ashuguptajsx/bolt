@@ -12,6 +12,13 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { useSidebar } from "@/components/ui/sidebar";
 
+export const countToken = (inputText) => {
+  return inputText
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word).length;
+};
+
 function ChatView() {
   const convex = useConvex();
   const { authentication } = useContext(AuthenticationContext);
@@ -20,7 +27,8 @@ function ChatView() {
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
   const { id } = useParams();
-  const {toggleSidebar} = useSidebar();
+  const { toggleSidebar } = useSidebar();
+  const UpdateToken = useMutation(api.users.UpdateToken);
 
   useEffect(() => {
     if (id) {
@@ -60,6 +68,9 @@ function ChatView() {
         content: result.data.result,
       },
     ]);
+
+    
+
     await UpdateMessages({
       messages: [
         ...messages,
@@ -70,6 +81,12 @@ function ChatView() {
       ],
       workspaceId: id,
     });
+
+    const token = Number(authentication?.token)-Number(countToken(JSON.stringify(GetResponse)));
+    await UpdateToken({
+      
+    })
+
     setLoading(false);
   };
 
@@ -100,7 +117,6 @@ function ChatView() {
                 width={35}
                 height={35}
                 className="rounded-full"
-               
               />
             )}
             <ReactMarkdown className="flex flex-col">

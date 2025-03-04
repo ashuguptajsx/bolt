@@ -1,7 +1,7 @@
 "use client";
 import { ArrowRight } from "lucide-react";
 import React, { useState, useContext } from "react";
-import Suggestion from "../boiler-plate/suggestion";
+import Suggestion from "../boiler-plate/Suggestion";
 import { MessageContext } from "@/Context/MessageContext";
 import { AuthenticationContext } from "@/Context/AuthenticationContext";
 import SigninPage from "./SigninPage";

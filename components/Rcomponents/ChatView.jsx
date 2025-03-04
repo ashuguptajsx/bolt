@@ -28,7 +28,7 @@ function ChatView() {
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
   const { id } = useParams();
   const { toggleSidebar } = useSidebar();
-  const UpdateToken = useMutation(api.users.UpdateToken);
+  const UpdateTokens = useMutation(api.users.UpdateToken);
 
   useEffect(() => {
     if (id) {
@@ -60,37 +60,39 @@ function ChatView() {
     const result = await axios.post("/api/chat", {
       prompt: PROMPT,
     });
-    console.log(result.data.result);
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "ai",
-        content: result.data.result,
-      },
-    ]);
 
-    
+    const aiResponse = {
+      role: "ai",
+      content: result.data.result,
+    };
+
+    setMessages((prev) => [...prev, aiResponse]);
 
     await UpdateMessages({
-      messages: [
-        ...messages,
-        {
-          role: "ai",
-          content: result.data.result,
-        },
-      ],
+      messages: [...messages, aiResponse],
       workspaceId: id,
     });
 
-    const token = Number(authentication?.token)-Number(countToken(JSON.stringify(GetResponse)));
-    await UpdateToken({
-      
-    })
+    console.log("Authentication:", authentication);
+  console.log("Current token:", authentication?.token);
+  console.log("Token cost:", countToken(JSON.stringify(aiResponse)));
+
+    const token =
+      Number(authentication?.token) -
+      Number(countToken(JSON.stringify(aiResponse)));
+
+    await UpdateTokens({
+      userId: authentication?._id,
+      token: token,
+    });
 
     setLoading(false);
   };
 
   const onGenerate = async (input) => {
+
+    console.log("User input:", input);
+  console.log("Authentication:", authentication);
     setMessages((prev) => [
       ...prev,
       {

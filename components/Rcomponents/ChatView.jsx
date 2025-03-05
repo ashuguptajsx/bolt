@@ -74,8 +74,8 @@ function ChatView() {
     });
 
     console.log("Authentication:", authentication);
-  console.log("Current token:", authentication?.token);
-  console.log("Token cost:", countToken(JSON.stringify(aiResponse)));
+    console.log("Current token:", authentication?.token);
+    console.log("Token cost:", countToken(JSON.stringify(aiResponse)));
 
     const token =
       Number(authentication?.token) -
@@ -90,9 +90,8 @@ function ChatView() {
   };
 
   const onGenerate = async (input) => {
-
     console.log("User input:", input);
-  console.log("Authentication:", authentication);
+    console.log("Authentication:", authentication);
     setMessages((prev) => [
       ...prev,
       {
@@ -105,27 +104,31 @@ function ChatView() {
 
   return (
     <div className="h-[85vh] flex flex-col">
-      {/* Messages Container (Scrollable) */}
       <div className="flex-1 overflow-y-scroll scrollbar-hide space-y-2 pl-5">
-        {messages?.map((msg, index) => (
-          <div
-            key={index}
-            className="p-3 rounded-lg bg-gray-800 flex gap-2 items-center leading-7"
-          >
-            {msg.role === "user" && (
-              <Image
-                src={authentication?.picture}
-                alt="userImage"
-                width={35}
-                height={35}
-                className="rounded-full"
-              />
-            )}
-            <ReactMarkdown className="flex flex-col">
-              {msg.content}
-            </ReactMarkdown>
-          </div>
-        ))}
+        {console.log("Messages before map:", messages, typeof messages, Array.isArray(messages))}
+        {Array.isArray(messages) ? (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className="p-3 rounded-lg bg-gray-800 flex gap-2 items-center leading-7"
+            >
+              {msg.role === "user" && (
+                <Image
+                  src={authentication?.picture}
+                  alt="userImage"
+                  width={35}
+                  height={35}
+                  className="rounded-full"
+                />
+              )}
+              <ReactMarkdown className="flex flex-col">
+                {msg.content}
+              </ReactMarkdown>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">Messages unavailable (not an array)</p>
+        )}
         {loading && (
           <div className="p-3 rounded-lg bg-gray-800 flex gap-2 items-start">
             <Loader2Icon className="animate-spin" />

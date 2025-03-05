@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Button } from "@/components/ui/button";
-import Footer from "./Footer"; 
+import Footer from "./Footer";
 
 import Image from "next/image";
 import { MessageCircleCode } from "lucide-react";

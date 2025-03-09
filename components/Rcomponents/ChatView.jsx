@@ -137,7 +137,6 @@ function ChatView() {
         )}
       </div>
 
-      {/* Input Box (Fixed at Bottom) */}
       <div className="flex gap-2 items-end">
         {authentication && (
           <Image
